@@ -1,0 +1,195 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"></head><body><h1><a name="usage">How to use the HMM toolbox</a></h1><a name="usage">
+
+<h2>HMMs with discrete outputs</h2>
+
+<h3>Maximum likelihood parameter estimation using EM (Baum Welch)</h3>
+
+The script dhmm_em_demo.m gives an example of how to learn an HMM
+with discrete outputs. Let there be Q=2 states and O=3 output
+symbols. We create random stochastic matrices as follows.
+<pre>O = 3;
+Q = 2;
+prior0 = normalise(rand(Q,1));
+transmat0 = mk_stochastic(rand(Q,Q));
+obsmat0 = mk_stochastic(rand(Q,O));  
+</pre>
+Now we sample nex=20 sequences of length T=10 each from this model, to
+use as training data.
+<pre>T=10;
+nex=20;
+data = dhmm_sample(prior0, transmat0, obsmat0, nex, T);  
+</pre>
+Here data is 20x10.
+Now we make a random guess as to what the parameters are,
+<pre>prior1 = normalise(rand(Q,1));
+transmat1 = mk_stochastic(rand(Q,Q));
+obsmat1 = mk_stochastic(rand(Q,O));
+</pre>
+and  improve our guess using 5 iterations of EM...
+<pre>[LL, prior2, transmat2, obsmat2] = dhmm_em(data, prior1, transmat1, obsmat1, 'max_iter', 5);
+</pre>
+LL(t) is the log-likelihood after iteration t, so we can plot the
+learning curve.
+
+
+<h3>Sequence classification</h3>
+
+To evaluate the log-likelihood of a trained model given test data,
+proceed as follows:
+<pre>loglik = dhmm_logprob(data, prior2, transmat2, obsmat2)
+</pre>
+Note: the discrete alphabet is assumed to be {1, 2, ..., O},
+where O = size(obsmat, 2). Hence data cannot contain any 0s.
+<p>
+To classify a sequence into one of k classes, train up k HMMs, one per
+class, and then compute the log-likelihood that each model gives to
+the test sequence; if the i'th model is the most likely, then declare
+the class of the sequence to be class i.
+
+</p><h3>Computing the most probable sequence (Viterbi)</h3>
+
+First you need to evaluate B(i,t) = P(y_t | Q_t=i) for all t,i:
+<pre>B = multinomial_prob(data, obsmat);
+</pre>
+Then you can use
+<pre>[path] = viterbi_path(prior, transmat, B)   
+</pre>
+
+
+<h2>HMMs with mixture of Gaussians outputs</h2>
+
+<h3>Maximum likelihood parameter estimation using EM (Baum Welch)</h3>
+
+Let us generate nex=50 vector-valued sequences of length T=50; each
+vector has size O=2.
+<pre>O = 2;
+T = 50;
+nex = 50;
+data = randn(O,T,nex);
+</pre>
+Now let use fit a mixture of M=2 Gaussians for each of the Q=2 states
+using K-means.
+<pre>M = 2;
+Q = 2;
+left_right = 0;
+
+prior0 = normalise(rand(Q,1));
+transmat0 = mk_stochastic(rand(Q,Q));
+
+[mu0, Sigma0] = mixgauss_init(Q*M, reshape(data, [O T*nex]), cov_type);
+mu0 = reshape(mu0, [O Q M]);
+Sigma0 = reshape(Sigma0, [O O Q M]);
+mixmat0 = mk_stochastic(rand(Q,M));
+
+</pre>
+Finally, let us improve these parameter estimates using EM.
+<pre>[LL, prior1, transmat1, mu1, Sigma1, mixmat1] = ...
+    mhmm_em(data, prior0, transmat0, mu0, Sigma0, mixmat0, 'max_iter', 2);
+</pre>
+Since EM only finds a local optimum, good initialisation is crucial.
+<b>The initialisation procedure illustrated above is very crude, and is probably
+not adequate for real applications...</b>
+Click </a><a href="http://www.media.mit.edu/wearables/mithril/BNT/mixtureBNT.txt">here</a>
+for a real-world example of EM with mixtures of Gaussians using BNT.
+<p>
+
+
+</p><h3><a name="loglikpos">What to do if the log-likelihood becomes positive?</a></h3><a name="loglikpos">
+
+<b>It is possible for p(x) &gt; 1 if p(x) is a probability density
+function</b>, such as a Gaussian. (The requirements for a density are
+p(x)&gt;0 for all x and int_x p(x) = 1.) In practice this usually means your
+covariance is shrinking to a point/delta function, so you should
+increase the width of the prior
+(see </a><a href="#priorcov">below</a>),
+or constrain the matrix to be spherical 
+or diagonal, or clamp it to a large fixed constant (not learn it at all).
+It is also very helpful to ensure the
+components of the data vectors  have small and comparable magnitudes
+(use e.g., KPMstats/standardize).
+
+<p>
+This is a well-known pathology of maximum likelihood estimation for
+Gaussian mixtures: the global optimum may place one mixture component
+on a single data point, and give it 0 covariance, and hence infinite
+likelihood. One usually relies on the fact that EM cannot find the
+global optimum to avoid such pathologies.
+
+</p><h3><a name="decreasingloglik">What to do if the log-likelihood
+decreases during EM?</a></h3><a name="decreasingloglik">
+
+Since I implicitly add a prior to every covariance matrix
+(see </a><a href="#priorcov">below</a>), what increases is loglik + log(prior),
+but what I print is just loglik, which may occasionally decrease.
+This suggests that one of your mixture components is not getting
+enough data. Try a better initialization or fewer clusters (states).
+
+<h3><a name="singularcov">What to do if the covariance matrix becomes singular?</a></h3><a name="singularcov">
+
+Estimates of the covariance matrix often become singular if you have
+too little data, or if too few points are assigned to a cluster center
+due to a bad initialization of the means.
+In this case, you should constrain the covariance to
+be spherical or diagonal, or adjust the prior (see </a><a href="#priorcov">below</a>), or try a
+better initialization.
+
+<h3><a name="priorcov">How do I add a prior to the covariance matrix?</a></h3><a name="priorcov">
+
+Buried inside of KPMstats/mixgauss_Mstep you will see that cov_prior
+is initialized to 0.01*I. This is added to the maximum likelihood
+estimate after every M step.
+To change this, you will need to modify the
+mhmm_em function so it calls mixgauss_Mstep with a different value.
+ 
+
+
+
+<h3>Sequence classification</h3>
+
+To classify a sequence (e.g., of speech) into one of k classes (e.g.,
+the digits 0-9), proceed as in the DHMM case above,
+but use the following procedure to compute likelihood:
+<pre>loglik = mhmm_logprob(data, prior, transmat, mu, Sigma, mixmat);
+</pre>
+
+
+<h3>Computing the most probable sequence (Viterbi)</h3>
+
+First you need to evaluate B(t,i) = P(y_t | Q_t=i) for all t,i:
+<pre>B = mixgauss_prob(data(:,:,ex), mu, Sigma, mixmat);
+</pre>
+where data(:,:,ex) is OxT where O is the size of the observation vector.
+Finally, use
+<pre>[path] = viterbi_path(prior, transmat, B);
+</pre>
+
+
+<h2>HMMs with Gaussian outputs</h2>
+
+This is just like the mixture of Gaussians case,
+except we have M=1, and hence there is no mixing matrix.
+<!--
+The learning routine is called as follows:
+<pre>
+[LL, prior1, transmat1, mu1, Sigma1] = ...
+    mhmm_em(data, prior0, transmat0, mu0, Sigma0,  max_iter);
+</pre>
+The classification routine is called as follows:
+<pre>
+loglik = log_lik_ghmm(data, prior, transmat, mu, Sigma);
+</pre>
+The likelihood routine is called as
+<pre>
+B = eval_pdf_cond_gauss(data, mu, Sigma);
+</pre>
+-->
+
+<h2>Online EM for discrete HMMs/ POMDPs</h2>
+
+For some applications (e.g., reinforcement learning/ adaptive
+control), it is necessary to learn a model online.
+The script dhmm_em_online_demo gives an example of how to do this.
+
+
+</a></body></html>
