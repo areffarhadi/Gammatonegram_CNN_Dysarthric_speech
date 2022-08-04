@@ -8,9 +8,9 @@ the dataset can be downloaded from [UA speech dataset link](http://www.isle.illi
 Using this package, you can use [a pre-trained CNN](https://www.mathworks.com/help/deeplearning/ug/pretrained-convolutional-neural-networks.html) (for instance: Alexnet) to retrain for a new scenario in dysarthric speech recognition, dysarthric speaker identification, and speech intelligibility assessment. 
 In this repository, we use Gammatonegram as a new representation method for speech signal as a picture. Figure (1) shows the gammatonegram of two utterances of the isolated word "one" from the speaker F04 of the UA dataset with 62% speech intelligibility. 
 
-<p align="center">
+
  ![F04_B2_D1_M2](https://user-images.githubusercontent.com/93467718/182780335-a9cf3945-8fa6-4930-8289-a25145fde049.jpg)![F04_B2_D1_M8](https://user-images.githubusercontent.com/93467718/182780373-cd703c31-864d-4e6a-acdd-6a790dd479da.jpg)
-</p>
+
  Figure (1). Gammatonegram representation
 
 In the first step, you should save the data of each isolated word into separate folders and then run the proposed M-files.
