@@ -14,7 +14,7 @@ In this repository, we use Gammatonegram as a new representation method for spee
  Figure (1). Gammatonegram representation
 
 <p align="center">
-  ![F04_B2_D1_M2](https://user-images.githubusercontent.com/93467718/182780335-a9cf3945-8fa6-4930-8289-a25145fde049.jpg)
+  <![F04_B2_D1_M2](https://user-images.githubusercontent.com/93467718/182780335-a9cf3945-8fa6-4930-8289-a25145fde049.jpg)>
 </p>
 
 In the first step, you should save the data of each isolated word into separate folders and then run the proposed M-files.
