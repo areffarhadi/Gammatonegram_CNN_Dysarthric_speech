@@ -10,3 +10,4 @@ in this repository we use Gammatonegram as new representation method for speech 
   title="Optional title"
   style="display: inline-block; margin: 0 auto; max-width: 300px">
   
+![12](https://user-images.githubusercontent.com/93467718/182779884-1f2cdd8d-885b-4f23-a1dc-a1971fa5beab.JPG)
