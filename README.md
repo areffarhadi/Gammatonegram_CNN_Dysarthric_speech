@@ -15,7 +15,7 @@ In this repository, we use Gammatonegram as a new representation method for spee
 
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/93467718/182780335-a9cf3945-8fa6-4930-8289-a25145fde049.jpg">
+  <img src="https://user-images.githubusercontent.com/93467718/182780335-a9cf3945-8fa6-4930-8289-a25145fde049.jpg","https://user-images.githubusercontent.com/93467718/182780373-cd703c31-864d-4e6a-acdd-6a790dd479da.jpg">
 </p>
 <p align="center">
   <![F04_B2_D1_M2](https://user-images.githubusercontent.com/93467718/182780335-a9cf3945-8fa6-4930-8289-a25145fde049.jpg)>
