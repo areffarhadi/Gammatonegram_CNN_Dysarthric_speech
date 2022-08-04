@@ -31,6 +31,7 @@ In the last scenario, we proposed a Cascade two-step system for speech recogniti
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/93467718/182784417-9a0b58ab-8120-4a02-8c3a-f5505480b3fc.gif">
+ 
  Figure(2). Proposed cascade system for speech recognition
 </p>
 ![Drawing2](https://user-images.githubusercontent.com/93467718/182784417-9a0b58ab-8120-4a02-8c3a-f5505480b3fc.gif)
