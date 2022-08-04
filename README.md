@@ -1,6 +1,6 @@
 # Gammatonegram_CNN_Dysarthric_speech
 MATLAB implementation for Dysarthric Speech Processing using Gammatonegram and Convolutional Neural Network (CNN) on the UA speech dataset.
-in this implementation, we use two MATLAB toolbox
+in this implementation, we use two MATLAB toolbox:
 * Gammatonegram By Dan Elis
 * Murphy HMM toolbox
 
@@ -20,7 +20,7 @@ based on the Murphy toolbox, there is a comparison between the proposed (Gammato
 To run the HMM, use the test2.m from the Murphy folder.
 To run the Gammatonegram and Spectrogram-based systems in different scenarios my_train_test_CNN.m is ready. Using this M-file, all the speech recognition, speaker identification, and Intelligibility assessment systems can be trained.
 
-In the last scenario, we proposed a Cascade two-step system for speech recognition that, in the first step, recognizes the speech intelligibility and, based on the intelligibility level, turns on one of the speech recognition systems. you can use test_ASR_cascade_2_class_intell.m to run this task 
+In the last scenario, we proposed a Cascade two-step system for speech recognition that, in the first step, recognizes the speech intelligibility and, based on the intelligibility level, turns on one of the speech recognition systems. you can use test_ASR_cascade_2_class_intell.m to run this task.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/93467718/182784417-9a0b58ab-8120-4a02-8c3a-f5505480b3fc.gif">
