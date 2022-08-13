@@ -1,10 +1,10 @@
 # Gammatonegram_CNN_Dysarthric_speech
 MATLAB implementation for Dysarthric Speech Processing using Gammatonegram and Convolutional Neural Network (CNN) on the UA speech dataset.
 
-**** Trained models will be shared after paper publication ****
+**** **Trained models will be shared after paper publication** ****
 
 in this implementation, we use two MATLAB toolbox:
-* Gammatonegram By Dan Elis
+* Gammatonegram By [Dan Ellis](https://www.ee.columbia.edu/~dpwe/resources/matlab/gammatonegram/)
 * Murphy HMM toolbox
 
 the dataset can be downloaded from [UA speech dataset link](http://www.isle.illinois.edu/sst/data/UASpeech/).
