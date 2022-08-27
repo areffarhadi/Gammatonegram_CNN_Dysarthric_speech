@@ -25,12 +25,7 @@ To run the Gammatonegram and Spectrogram-based systems in different scenarios my
 
 In the last scenario, we proposed a Cascade two-step system for speech recognition that, in the first step, recognizes the speech intelligibility and, based on the intelligibility level, turns on one of the speech recognition systems. you can use test_ASR_cascade_2_class_intell.m to run this task.
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/93467718/182784417-9a0b58ab-8120-4a02-8c3a-f5505480b3fc.gif">
- </p>
- <p align="center">
- Figure(2). Proposed cascade system for speech recognition
-</p>
+
 
 
 
